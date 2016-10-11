@@ -117,6 +117,7 @@ class Main extends egret.DisplayObjectContainer {
      * Create a game scene
      */
     private createGameScene():void {
+//第一页        
         var sky1:egret.Bitmap = this.createBitmapByName("background1_jpg");
         this.addChild(sky1);
         var stageW:number = this.stage.stageWidth;
@@ -173,7 +174,8 @@ class Main extends egret.DisplayObjectContainer {
 
         this.MovePages(2, this);
 
-//旋转
+
+    //旋转
         var rotation1 : Function = function(){
             var circle1 = egret.Tween.get(rotarysky1);
             circle1.to( {rotation: -360}, 50000);    
@@ -181,24 +183,15 @@ class Main extends egret.DisplayObjectContainer {
         }
         rotation1();
 
-//闪烁
-/*
+    //闪烁
         var flicker : Function = function(){
             var flicker_colorLabel3 = egret.Tween.get(colorLabel3);
-            colorLabel3.to({alpha: 1},2000);
-            colorLabel3.to({alpha: 0},100);
-            colorLabel3.
+            flicker_colorLabel3.to({"alpha": 1}, 500);
+            flicker_colorLabel3.wait(300);
+            flicker_colorLabel3.to({"alpha": 0}, 500);
+            flicker_colorLabel3.call(flicker, self);
         }
-*/
-
-
-
-
-
-
-
-
-
+        flicker();
 
 
 //第二页
@@ -206,36 +199,56 @@ class Main extends egret.DisplayObjectContainer {
         this.addChild(sky2);
         sky2.width = stageW;
         sky2.height = stageH;
-        sky2.y = sky1.height;
+        sky2.y = stageH;
 
         var sky2_1:egret.Bitmap = this.createBitmapByName("2_jpg");
         this.addChild(sky2_1);
+        sky2_1.alpha = 0;
         sky2_1.x = 0;
         sky2_1.y = stageH;
 
         var sky2_2:egret.Bitmap = this.createBitmapByName("3_jpg");
         this.addChild(sky2_2);
+        sky2_2.alpha = 1;
         sky2_2.x = 0;
-        sky2_2.y = stageH * 2;
+        sky2_2.y = stageH;
+
+        var sky2back = new egret.Shape();
+        sky2back.graphics.beginFill(0xFFFFFF, 0.2);
+        sky2back.graphics.drawRect(0, 0, stageW, stageH - 400);
+        sky2back.graphics.endFill();
+        sky2back.y = stageH + 400;
+        this.addChild(sky2back);
+
+ 
+
+
+    //改变图片
+        var change : Function = function(){
+            var change_sky2_1 = egret.Tween.get(sky2_1);
+            var change_sky2_2 = egret.Tween.get(sky2_2);
+            change_sky2_1.to({"alpha": 1}, 2000);
+            change_sky2_2.to({"alpha": 0}, 2000);
+            change_sky2_1.wait(2000);
+            change_sky2_2.wait(2000);
+            change_sky2_1.to({"alpha": 0}, 2000);
+            change_sky2_2.to({"alpha": 1}, 2000);
+            change_sky2_1.wait(2000);
+            change_sky2_2.wait(2000);
+            change_sky2_1.call(change, self);
+        }
+        change();
+
+
+//第三页
+        var sky3:egret.Bitmap = this.createBitmapByName("background3_jpg");
+        this.addChild(sky3);
+        sky3.width = stageW;
+        sky3.height = stageH;
+        sky3.y = stageH * 2;
 
 
 
-/*
-
-
-
-        var line = new egret.Shape();
-        line.graphics.lineStyle(2,0xffffff);
-        line.graphics.moveTo(0,0);
-        line.graphics.lineTo(0,117);
-        line.graphics.endFill();
-        line.x = 172;
-        line.y = 61;
-        this.addChild(line);
-
-
-
-*/
         var textfield = new egret.TextField();
         this.addChild(textfield);
         textfield.alpha = 0;
@@ -246,11 +259,6 @@ class Main extends egret.DisplayObjectContainer {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
-
-
-
-
-
 
         //根据name关键字，异步获取一个json配置文件，name属性请参考resources/resource.json配置文件的内容。
         // Get asynchronously a json configuration file according to name keyword. As for the property of name please refer to the configuration file of resources/resource.json.

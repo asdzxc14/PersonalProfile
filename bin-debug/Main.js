@@ -101,6 +101,7 @@ var Main = (function (_super) {
      * Create a game scene
      */
     p.createGameScene = function () {
+        //第一页        
         var sky1 = this.createBitmapByName("background1_jpg");
         this.addChild(sky1);
         var stageW = this.stage.stageWidth;
@@ -158,44 +159,57 @@ var Main = (function (_super) {
         };
         rotation1();
         //闪烁
-        /*
-                var flicker : Function = function(){
-                    var flicker_colorLabel3 = egret.Tween.get(colorLabel3);
-                    colorLabel3.to({alpha: 1},2000);
-                    colorLabel3.to({alpha: 0},100);
-                    colorLabel3.
-                }
-        */
+        var flicker = function () {
+            var flicker_colorLabel3 = egret.Tween.get(colorLabel3);
+            flicker_colorLabel3.to({ "alpha": 1 }, 500);
+            flicker_colorLabel3.wait(300);
+            flicker_colorLabel3.to({ "alpha": 0 }, 500);
+            flicker_colorLabel3.call(flicker, self);
+        };
+        flicker();
         //第二页
         var sky2 = this.createBitmapByName("background2_jpg");
         this.addChild(sky2);
         sky2.width = stageW;
         sky2.height = stageH;
-        sky2.y = sky1.height;
+        sky2.y = stageH;
         var sky2_1 = this.createBitmapByName("2_jpg");
         this.addChild(sky2_1);
+        sky2_1.alpha = 0;
         sky2_1.x = 0;
         sky2_1.y = stageH;
         var sky2_2 = this.createBitmapByName("3_jpg");
         this.addChild(sky2_2);
+        sky2_2.alpha = 1;
         sky2_2.x = 0;
-        sky2_2.y = stageH * 2;
-        /*
-        
-        
-        
-                var line = new egret.Shape();
-                line.graphics.lineStyle(2,0xffffff);
-                line.graphics.moveTo(0,0);
-                line.graphics.lineTo(0,117);
-                line.graphics.endFill();
-                line.x = 172;
-                line.y = 61;
-                this.addChild(line);
-        
-        
-        
-        */
+        sky2_2.y = stageH;
+        var sky2back = new egret.Shape();
+        sky2back.graphics.beginFill(0xFFFFFF, 0.2);
+        sky2back.graphics.drawRect(0, 0, stageW, stageH - 400);
+        sky2back.graphics.endFill();
+        sky2back.y = stageH + 400;
+        this.addChild(sky2back);
+        //改变图片
+        var change = function () {
+            var change_sky2_1 = egret.Tween.get(sky2_1);
+            var change_sky2_2 = egret.Tween.get(sky2_2);
+            change_sky2_1.to({ "alpha": 1 }, 2000);
+            change_sky2_2.to({ "alpha": 0 }, 2000);
+            change_sky2_1.wait(2000);
+            change_sky2_2.wait(2000);
+            change_sky2_1.to({ "alpha": 0 }, 2000);
+            change_sky2_2.to({ "alpha": 1 }, 2000);
+            change_sky2_1.wait(2000);
+            change_sky2_2.wait(2000);
+            change_sky2_1.call(change, self);
+        };
+        change();
+        //第三页
+        var sky3 = this.createBitmapByName("background3_jpg");
+        this.addChild(sky3);
+        sky3.width = stageW;
+        sky3.height = stageH;
+        sky3.y = stageH * 2;
         var textfield = new egret.TextField();
         this.addChild(textfield);
         textfield.alpha = 0;

@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,background1_jpg,background2_jpg,2_jpg,3_jpg,1_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,background1_jpg,background2_jpg,2_jpg,3_jpg,1_png,background3_jpg",
 			"name": "preload"
 		}
 	],
@@ -45,6 +45,11 @@
 			"name": "1_png",
 			"type": "image",
 			"url": "assets/1.png"
+		},
+		{
+			"name": "background3_jpg",
+			"type": "image",
+			"url": "assets/background3.jpg"
 		}
 	]
 }
