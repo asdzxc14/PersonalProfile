@@ -171,6 +171,8 @@ class Main extends egret.DisplayObjectContainer {
         colorLabel3.y = 820;
         this.addChild(colorLabel3); 
 
+        this.MovePages(2, this);
+
 //旋转
         var rotation1 : Function = function(){
             var circle1 = egret.Tween.get(rotarysky1);
@@ -250,42 +252,46 @@ class Main extends egret.DisplayObjectContainer {
 
 
 
-
-
-//翻页
-        var offsetY: number;
-        var setY: number;
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, startMoving, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, stopMoving, this);
-        function beginMoving (e: egret.TouchEvent): void {
-            setY = e.stageY;
-        }
-        function startMoving (e: egret.TouchEvent): void {
-            setY = e.stageY;
-        }
-        function stopMoving (e: egret.TouchEvent) {
-            offsetY = setY - e.stageY;
-            if (offsetY > stageH / 4) {
-                textfield.touchEnabled = false;
-                egret.Tween.get(sky2).to({ y: 0 }, 1000, egret.Ease.backOut);
-            }
-            else if (offsetY < - stageH / 4) {
-                textfield.touchEnabled = true;
-                egret.Tween.get(sky2).to({ y: stageH }, 1000, egret.Ease.backOut);
-            }
-        }
-        
-
-
-
         //根据name关键字，异步获取一个json配置文件，name属性请参考resources/resource.json配置文件的内容。
         // Get asynchronously a json configuration file according to name keyword. As for the property of name please refer to the configuration file of resources/resource.json.
         RES.getResAsync("description_json", this.startAnimation, this)
     }
 
 
+//翻页
+    private MovePages(PageNumber: number, things: any ): void {
+        var CurrentPage = 0;
+        var Ymove: number;
+        var stageW: number = this.stage.stageWidth;
+        var stageH: number = this.stage.stageHeight;  
+        things.touchEnabled = true;
+        things.addEventListener(egret.TouchEvent.TOUCH_BEGIN, (e: egret.TouchEvent) => {
+            Ymove = e.stageY - things.y;
+            things.addEventListener(egret.TouchEvent.TOUCH_MOVE, startMove, this);
+        }
+        );
 
-    
+        function startMove(MouseTouch: egret.TouchEvent): void {
+            things.y = MouseTouch.stageY - Ymove;
+            things.addEventListener(egret.TouchEvent.TOUCH_END, stopMove, this);
+        }
+
+        function stopMove(MouseTouch: egret.TouchEvent) {
+            var stageMove = egret.Tween.get(this);
+            var currentY = MouseTouch.stageY - Ymove;
+
+            if (currentY > (CurrentPage * -stageH - 300) && currentY < (CurrentPage * -stageH + 300)) { 
+                stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
+            } else if (currentY < (CurrentPage * -stageH - 300)) {
+                CurrentPage++;
+                stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
+            } else if (currentY > (CurrentPage * -stageH - 300)) {  
+                CurrentPage--;
+                stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
+            }
+            things.removeEventListener(egret.TouchEvent.TOUCH_MOVE, startMove, this);
+        }
+    }
 
 
 

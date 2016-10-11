@@ -149,6 +149,7 @@ var Main = (function (_super) {
         colorLabel3.x = 0;
         colorLabel3.y = 820;
         this.addChild(colorLabel3);
+        this.MovePages(2, this);
         //旋转
         var rotation1 = function () {
             var circle1 = egret.Tween.get(rotarysky1);
@@ -205,35 +206,42 @@ var Main = (function (_super) {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
-        //以下是翻页
-        //设定2个偏移量
-        var offsetY;
-        var setY;
-        //手指按到屏幕，触发 startMove 方法
-        //this.stage.addEventListener(egret.TouchEvent.TOUCH_TAP, beginMove, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, startMove, this);
-        //手指离开屏幕，触发 stopMove 方法
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, stopMove, this);
-        function beginMove(e) {
-            setY = e.stageY;
-        }
-        function startMove(e) {
-            setY = e.stageY;
-        }
-        function stopMove(e) {
-            offsetY = setY - e.stageY;
-            if (offsetY > stageH / 4) {
-                textfield.touchEnabled = false;
-                egret.Tween.get(sky2).to({ y: 0 }, 1000, egret.Ease.backOut);
-            }
-            else if (offsetY < -stageH / 4) {
-                textfield.touchEnabled = true;
-                egret.Tween.get(sky2).to({ y: stageH }, 1000, egret.Ease.backOut);
-            }
-        }
         //根据name关键字，异步获取一个json配置文件，name属性请参考resources/resource.json配置文件的内容。
         // Get asynchronously a json configuration file according to name keyword. As for the property of name please refer to the configuration file of resources/resource.json.
         RES.getResAsync("description_json", this.startAnimation, this);
+    };
+    //翻页
+    p.MovePages = function (PageNumber, things) {
+        var _this = this;
+        var CurrentPage = 0;
+        var Ymove;
+        var stageW = this.stage.stageWidth;
+        var stageH = this.stage.stageHeight;
+        things.touchEnabled = true;
+        things.addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e) {
+            Ymove = e.stageY - things.y;
+            things.addEventListener(egret.TouchEvent.TOUCH_MOVE, startMove, _this);
+        });
+        function startMove(MouseTouch) {
+            things.y = MouseTouch.stageY - Ymove;
+            things.addEventListener(egret.TouchEvent.TOUCH_END, stopMove, this);
+        }
+        function stopMove(MouseTouch) {
+            var stageMove = egret.Tween.get(this);
+            var currentY = MouseTouch.stageY - Ymove;
+            if (currentY > (CurrentPage * -stageH - 300) && currentY < (CurrentPage * -stageH + 300)) {
+                stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
+            }
+            else if (currentY < (CurrentPage * -stageH - 300)) {
+                CurrentPage++;
+                stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
+            }
+            else if (currentY > (CurrentPage * -stageH - 300)) {
+                CurrentPage--;
+                stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
+            }
+            things.removeEventListener(egret.TouchEvent.TOUCH_MOVE, startMove, this);
+        }
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
