@@ -116,7 +116,7 @@ var Main = (function (_super) {
         this.addChild(page3);
         page3.width = stageW;
         page3.height = stageH;
-        //第一页        
+        //第一页
         var sky1 = this.createBitmapByName("background1_jpg");
         page1.addChild(sky1);
         sky1.width = stageW;
@@ -172,14 +172,14 @@ var Main = (function (_super) {
         };
         rotation1();
         //闪烁
-        var flicker = function () {
+        var sky1flicker = function () {
             var flicker_colorLabel3 = egret.Tween.get(colorLabel3);
             flicker_colorLabel3.to({ "alpha": 1 }, 500);
             flicker_colorLabel3.wait(300);
             flicker_colorLabel3.to({ "alpha": 0 }, 500);
-            flicker_colorLabel3.call(flicker, self);
+            flicker_colorLabel3.call(sky1flicker, self);
         };
-        flicker();
+        sky1flicker();
         //第二页
         var sky2 = this.createBitmapByName("background2_jpg");
         page2.addChild(sky2);
@@ -240,6 +240,24 @@ var Main = (function (_super) {
         sky3.width = stageW;
         sky3.height = stageH;
         sky3.y = stageH * 2;
+        var sky3text = new egret.TextField();
+        sky3text.textColor = 0xFFFFFF;
+        sky3text.width = stageW;
+        sky3text.textAlign = egret.HorizontalAlign.CENTER;
+        sky3text.fontFamily = "KaiTi";
+        sky3text.text = "THANKS FOR\n       WATCHING";
+        sky3text.size = 72;
+        sky3text.x = 0;
+        sky3text.y = stageH * 2 + 230;
+        page3.addChild(sky3text);
+        var sky3flicker = function () {
+            var flicker_sky3text = egret.Tween.get(sky3text);
+            flicker_sky3text.to({ "alpha": 1 }, 500);
+            flicker_sky3text.wait(500);
+            flicker_sky3text.to({ "alpha": 0 }, 500);
+            flicker_sky3text.call(sky3flicker, self);
+        };
+        sky3flicker();
         var textfield = new egret.TextField();
         this.addChild(textfield);
         textfield.alpha = 0;

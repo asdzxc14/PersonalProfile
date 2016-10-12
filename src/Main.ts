@@ -199,14 +199,14 @@ class Main extends egret.DisplayObjectContainer {
         rotation1();
 
     //闪烁
-        var flicker:Function = function() {
+        var sky1flicker:Function = function() {
             var flicker_colorLabel3 = egret.Tween.get(colorLabel3);
             flicker_colorLabel3.to( {"alpha": 1}, 500 );
             flicker_colorLabel3.wait(300);
             flicker_colorLabel3.to( {"alpha": 0}, 500 );
-            flicker_colorLabel3.call(flicker, self);
+            flicker_colorLabel3.call(sky1flicker, self);
         }
-        flicker();
+        sky1flicker();
 
 
 //第二页
@@ -280,10 +280,26 @@ class Main extends egret.DisplayObjectContainer {
         sky3.height = stageH;
         sky3.y = stageH * 2;
 
+        var sky3text = new egret.TextField();
+        sky3text.textColor = 0xFFFFFF;
+        sky3text.width = stageW;
+        sky3text.textAlign = egret.HorizontalAlign.CENTER;
+        sky3text.fontFamily = "KaiTi";
+        sky3text.text = "THANKS FOR\n       WATCHING";
+        sky3text.size = 72;
+        sky3text.x = 0;
+        sky3text.y = stageH * 2 + 230;
+        page3.addChild(sky3text); 
 
 
-
-
+        var sky3flicker:Function = function() {
+            var flicker_sky3text = egret.Tween.get(sky3text);
+            flicker_sky3text.to( {"alpha": 1}, 500 );
+            flicker_sky3text.wait(500);
+            flicker_sky3text.to( {"alpha": 0}, 500 );
+            flicker_sky3text.call(sky3flicker, self);
+        }
+        sky3flicker();
 
         var textfield = new egret.TextField();
         this.addChild(textfield);
