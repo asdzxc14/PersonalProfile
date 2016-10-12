@@ -101,15 +101,28 @@ var Main = (function (_super) {
      * Create a game scene
      */
     p.createGameScene = function () {
-        //第一页        
-        var sky1 = this.createBitmapByName("background1_jpg");
-        this.addChild(sky1);
+        var _this = this;
+        var page1 = new egret.DisplayObjectContainer();
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
+        this.addChild(page1);
+        page1.width = stageW;
+        page1.height = stageH;
+        var page2 = new egret.DisplayObjectContainer();
+        this.addChild(page2);
+        page2.width = stageW;
+        page2.height = stageH;
+        var page3 = new egret.DisplayObjectContainer();
+        this.addChild(page3);
+        page3.width = stageW;
+        page3.height = stageH;
+        //第一页        
+        var sky1 = this.createBitmapByName("background1_jpg");
+        page1.addChild(sky1);
         sky1.width = stageW;
         sky1.height = stageH;
         var rotarysky1 = this.createBitmapByName("1_png");
-        this.addChild(rotarysky1);
+        page1.addChild(rotarysky1);
         rotarysky1.anchorOffsetX = rotarysky1.width / 2;
         rotarysky1.anchorOffsetY = rotarysky1.height / 2;
         rotarysky1.x = stageW / 2;
@@ -119,7 +132,7 @@ var Main = (function (_super) {
         topMask1.graphics.drawRect(0, 0, stageW, 320);
         topMask1.graphics.endFill();
         topMask1.y = 550;
-        this.addChild(topMask1);
+        page1.addChild(topMask1);
         var colorLabel1 = new egret.TextField();
         colorLabel1.textColor = 0xFFFFFF;
         colorLabel1.width = stageW;
@@ -129,7 +142,7 @@ var Main = (function (_super) {
         colorLabel1.size = 96;
         colorLabel1.x = 0;
         colorLabel1.y = 600;
-        this.addChild(colorLabel1);
+        page1.addChild(colorLabel1);
         var colorLabel2 = new egret.TextField();
         colorLabel2.textColor = 0xFFFFFF;
         colorLabel2.width = stageW;
@@ -139,7 +152,7 @@ var Main = (function (_super) {
         colorLabel2.size = 64;
         colorLabel2.x = 0;
         colorLabel2.y = 730;
-        this.addChild(colorLabel2);
+        page1.addChild(colorLabel2);
         var colorLabel3 = new egret.TextField();
         colorLabel3.textColor = 0x00ff0c;
         colorLabel3.width = stageW;
@@ -149,7 +162,7 @@ var Main = (function (_super) {
         colorLabel3.size = 28;
         colorLabel3.x = 0;
         colorLabel3.y = 820;
-        this.addChild(colorLabel3);
+        page1.addChild(colorLabel3);
         this.MovePages(2, this);
         //旋转
         var rotation1 = function () {
@@ -169,26 +182,43 @@ var Main = (function (_super) {
         flicker();
         //第二页
         var sky2 = this.createBitmapByName("background2_jpg");
-        this.addChild(sky2);
+        page2.addChild(sky2);
         sky2.width = stageW;
         sky2.height = stageH;
         sky2.y = stageH;
+        var sky2_back = new egret.Shape();
+        sky2_back.graphics.beginFill(0xFFFFFF, 0.1);
+        sky2_back.graphics.drawRect(0, 0, stageW, stageH);
+        sky2_back.graphics.endFill();
+        sky2_back.y = stageH;
+        page2.addChild(sky2_back);
         var sky2_1 = this.createBitmapByName("2_jpg");
-        this.addChild(sky2_1);
+        page2.addChild(sky2_1);
         sky2_1.alpha = 0;
         sky2_1.x = 0;
         sky2_1.y = stageH;
         var sky2_2 = this.createBitmapByName("3_jpg");
-        this.addChild(sky2_2);
+        page2.addChild(sky2_2);
         sky2_2.alpha = 1;
         sky2_2.x = 0;
         sky2_2.y = stageH;
-        var sky2back = new egret.Shape();
-        sky2back.graphics.beginFill(0xFFFFFF, 0.2);
-        sky2back.graphics.drawRect(0, 0, stageW, stageH - 400);
-        sky2back.graphics.endFill();
-        sky2back.y = stageH + 400;
-        this.addChild(sky2back);
+        var sky2_textLabel = new egret.TextField();
+        sky2_textLabel.textColor = 0xFFFFFF;
+        sky2_textLabel.width = stageW - 250;
+        sky2_textLabel.size = 32;
+        sky2_textLabel.fontFamily = "Microsoft YaHei";
+        sky2_textLabel.x = 150;
+        sky2_textLabel.y = stageH + 500;
+        sky2_textLabel.lineSpacing = 20;
+        page2.addChild(sky2_textLabel);
+        var keyword = true;
+        sky2_back.touchEnabled = true;
+        sky2_back.addEventListener(egret.TouchEvent.TOUCH_BEGIN, function () {
+            if (keyword) {
+                keyword = false;
+                _this.typerwords(sky2_textLabel, "姓名：徐元超\n年龄：21\n专业：数字媒体技术\n意向职业：游戏美工\n游戏UI视觉设计师\n工作经历： 熟练掌握PS、 3DMAX等软件。在XXXX公司有游戏原画是XX个月实习经历。", 100);
+            }
+        }, this);
         //改变图片
         var change = function () {
             var change_sky2_1 = egret.Tween.get(sky2_1);
@@ -206,7 +236,7 @@ var Main = (function (_super) {
         change();
         //第三页
         var sky3 = this.createBitmapByName("background3_jpg");
-        this.addChild(sky3);
+        page3.addChild(sky3);
         sky3.width = stageW;
         sky3.height = stageH;
         sky3.y = stageH * 2;
@@ -255,6 +285,17 @@ var Main = (function (_super) {
                 stageMove.to({ x: 0, y: (CurrentPage * -stageH) }, 500, egret.Ease.backOut);
             }
             things.removeEventListener(egret.TouchEvent.TOUCH_MOVE, startMove, this);
+        }
+    };
+    //出字
+    p.typerwords = function (object, words, speed) {
+        if (words === void 0) { words = ""; }
+        var StringArray = words.split("");
+        var length = StringArray.length;
+        for (var i = 0; i < length; i++) {
+            egret.setTimeout(function () {
+                object.appendText(StringArray[Number(this)]);
+            }, i, speed * i);
         }
     };
     /**

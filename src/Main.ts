@@ -117,27 +117,43 @@ class Main extends egret.DisplayObjectContainer {
      * Create a game scene
      */
     private createGameScene():void {
-//第一页        
-        var sky1:egret.Bitmap = this.createBitmapByName("background1_jpg");
-        this.addChild(sky1);
+
+        var page1 = new egret.DisplayObjectContainer();
         var stageW:number = this.stage.stageWidth;
         var stageH:number = this.stage.stageHeight;
+        this.addChild(page1);
+        page1.width = stageW;
+        page1.height = stageH;
+
+        var page2 = new egret.DisplayObjectContainer();
+        this.addChild(page2);
+        page2.width = stageW;
+        page2.height = stageH;
+
+        var page3 = new egret.DisplayObjectContainer();
+        this.addChild(page3);
+        page3.width = stageW;
+        page3.height = stageH;
+
+//第一页
+        var sky1:egret.Bitmap = this.createBitmapByName("background1_jpg");
+        page1.addChild(sky1);
         sky1.width = stageW;
         sky1.height = stageH;
 
         var rotarysky1:egret.Bitmap = this.createBitmapByName("1_png");
-        this.addChild(rotarysky1);
-        rotarysky1.anchorOffsetX = rotarysky1.width /2;  
-        rotarysky1.anchorOffsetY = rotarysky1.height /2;     
+        page1.addChild(rotarysky1);
+        rotarysky1.anchorOffsetX = rotarysky1.width / 2;  
+        rotarysky1.anchorOffsetY = rotarysky1.height / 2;     
         rotarysky1.x = stageW / 2;
-        rotarysky1.y = rotarysky1.height /2 + 20;
+        rotarysky1.y = rotarysky1.height / 2 + 20;
 
         var topMask1 = new egret.Shape();
         topMask1.graphics.beginFill(0xFFFFFFF, 0.1);
         topMask1.graphics.drawRect(0, 0, stageW, 320);
         topMask1.graphics.endFill();
         topMask1.y = 550;
-        this.addChild(topMask1);
+        page1.addChild(topMask1);
 
         var colorLabel1 = new egret.TextField();
         colorLabel1.textColor = 0xFFFFFF;
@@ -148,7 +164,7 @@ class Main extends egret.DisplayObjectContainer {
         colorLabel1.size = 96;
         colorLabel1.x = 0;
         colorLabel1.y = 600;
-        this.addChild(colorLabel1);
+        page1.addChild(colorLabel1);
 
         var colorLabel2 = new egret.TextField();
         colorLabel2.textColor = 0xFFFFFF;
@@ -159,7 +175,7 @@ class Main extends egret.DisplayObjectContainer {
         colorLabel2.size = 64;
         colorLabel2.x = 0;
         colorLabel2.y = 730;
-        this.addChild(colorLabel2);        
+        page1.addChild(colorLabel2);        
 
         var colorLabel3 = new egret.TextField();
         colorLabel3.textColor = 0x00ff0c;
@@ -170,25 +186,24 @@ class Main extends egret.DisplayObjectContainer {
         colorLabel3.size = 28;
         colorLabel3.x = 0;
         colorLabel3.y = 820;
-        this.addChild(colorLabel3); 
+        page1.addChild(colorLabel3); 
 
         this.MovePages(2, this);
 
-
     //旋转
-        var rotation1 : Function = function(){
+        var rotation1 : Function = function() {
             var circle1 = egret.Tween.get(rotarysky1);
-            circle1.to( {rotation: -360}, 50000);    
+            circle1.to( {rotation: -360}, 50000 );    
             circle1.call(rotation1, 50000);
         }
         rotation1();
 
     //闪烁
-        var flicker : Function = function(){
+        var flicker:Function = function() {
             var flicker_colorLabel3 = egret.Tween.get(colorLabel3);
-            flicker_colorLabel3.to({"alpha": 1}, 500);
+            flicker_colorLabel3.to( {"alpha": 1}, 500 );
             flicker_colorLabel3.wait(300);
-            flicker_colorLabel3.to({"alpha": 0}, 500);
+            flicker_colorLabel3.to( {"alpha": 0}, 500 );
             flicker_colorLabel3.call(flicker, self);
         }
         flicker();
@@ -196,43 +211,61 @@ class Main extends egret.DisplayObjectContainer {
 
 //第二页
         var sky2:egret.Bitmap = this.createBitmapByName("background2_jpg");
-        this.addChild(sky2);
+        page2.addChild(sky2);
         sky2.width = stageW;
         sky2.height = stageH;
         sky2.y = stageH;
 
+        var sky2_back = new egret.Shape();
+        sky2_back.graphics.beginFill(0xFFFFFF, 0.1);
+        sky2_back.graphics.drawRect(0, 0, stageW, stageH);
+        sky2_back.graphics.endFill();
+        sky2_back.y = stageH;
+        page2.addChild(sky2_back);
+
         var sky2_1:egret.Bitmap = this.createBitmapByName("2_jpg");
-        this.addChild(sky2_1);
+        page2.addChild(sky2_1);
         sky2_1.alpha = 0;
         sky2_1.x = 0;
         sky2_1.y = stageH;
 
         var sky2_2:egret.Bitmap = this.createBitmapByName("3_jpg");
-        this.addChild(sky2_2);
+        page2.addChild(sky2_2);
         sky2_2.alpha = 1;
         sky2_2.x = 0;
         sky2_2.y = stageH;
 
-        var sky2back = new egret.Shape();
-        sky2back.graphics.beginFill(0xFFFFFF, 0.2);
-        sky2back.graphics.drawRect(0, 0, stageW, stageH - 400);
-        sky2back.graphics.endFill();
-        sky2back.y = stageH + 400;
-        this.addChild(sky2back);
+        var sky2_textLabel = new egret.TextField();
+        sky2_textLabel.textColor = 0xFFFFFF;
+        sky2_textLabel.width = stageW -250;
+        sky2_textLabel.size = 32;
+        sky2_textLabel.fontFamily = "Microsoft YaHei"
+        sky2_textLabel.x = 150;
+        sky2_textLabel.y = stageH + 500;
+        sky2_textLabel.lineSpacing = 20;
+        page2.addChild(sky2_textLabel);
+        var keyword = true;
 
- 
+        sky2_back.touchEnabled = true;
+        sky2_back.addEventListener(egret.TouchEvent.TOUCH_BEGIN, () => {
+            if (keyword) {
+                keyword = false;
+                this.typerwords(sky2_textLabel, "姓名：徐元超\n年龄：21\n专业：数字媒体技术\n意向职业：游戏美工\n游戏UI视觉设计师\n工作经历： 熟练掌握PS、 3DMAX等软件。在XXXX公司有游戏原画是XX个月实习经历。", 100);
+            }
+        }, this); 
 
 
+        
     //改变图片
-        var change : Function = function(){
+        var change:Function = function() {
             var change_sky2_1 = egret.Tween.get(sky2_1);
             var change_sky2_2 = egret.Tween.get(sky2_2);
-            change_sky2_1.to({"alpha": 1}, 2000);
-            change_sky2_2.to({"alpha": 0}, 2000);
+            change_sky2_1.to( {"alpha": 1}, 2000 );
+            change_sky2_2.to( {"alpha": 0}, 2000 );
             change_sky2_1.wait(2000);
             change_sky2_2.wait(2000);
-            change_sky2_1.to({"alpha": 0}, 2000);
-            change_sky2_2.to({"alpha": 1}, 2000);
+            change_sky2_1.to( {"alpha": 0}, 2000 );
+            change_sky2_2.to( {"alpha": 1}, 2000 );
             change_sky2_1.wait(2000);
             change_sky2_2.wait(2000);
             change_sky2_1.call(change, self);
@@ -242,10 +275,13 @@ class Main extends egret.DisplayObjectContainer {
 
 //第三页
         var sky3:egret.Bitmap = this.createBitmapByName("background3_jpg");
-        this.addChild(sky3);
+        page3.addChild(sky3);
         sky3.width = stageW;
         sky3.height = stageH;
         sky3.y = stageH * 2;
+
+
+
 
 
 
@@ -267,11 +303,11 @@ class Main extends egret.DisplayObjectContainer {
 
 
 //翻页
-    private MovePages(PageNumber: number, things: any ): void {
+    private MovePages(PageNumber:number, things:any ):void {
         var CurrentPage = 0;
-        var Ymove: number;
-        var stageW: number = this.stage.stageWidth;
-        var stageH: number = this.stage.stageHeight;  
+        var Ymove:number;
+        var stageW = this.stage.stageWidth;
+        var stageH = this.stage.stageHeight;  
         things.touchEnabled = true;
         things.addEventListener(egret.TouchEvent.TOUCH_BEGIN, (e: egret.TouchEvent) => {
             Ymove = e.stageY - things.y;
@@ -279,12 +315,12 @@ class Main extends egret.DisplayObjectContainer {
         }
         );
 
-        function startMove(MouseTouch: egret.TouchEvent): void {
+        function startMove(MouseTouch:egret.TouchEvent):void {
             things.y = MouseTouch.stageY - Ymove;
             things.addEventListener(egret.TouchEvent.TOUCH_END, stopMove, this);
         }
 
-        function stopMove(MouseTouch: egret.TouchEvent) {
+        function stopMove(MouseTouch:egret.TouchEvent) {
             var stageMove = egret.Tween.get(this);
             var currentY = MouseTouch.stageY - Ymove;
 
@@ -301,6 +337,16 @@ class Main extends egret.DisplayObjectContainer {
         }
     }
 
+//出字
+        private typerwords(object, words:string = "", speed:number):void {
+        var StringArray : Array<any> = words.split("");
+        var length = StringArray.length;
+        for (var i = 0; i < length; i++) {
+            egret.setTimeout(function () {              
+                object.appendText(StringArray[Number(this)]);
+            }, i, speed * i);              
+        }
+    }
 
 
     /**
